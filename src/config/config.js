@@ -1,8 +1,8 @@
 const PORT = 8080;
-const DB_NAME = 'digispoc_task';
+const DB_NAME = 'sample_task';
 const DB_HOST = 'localhost';
 const USER_NAME = 'root';
-const USER_PASS = 'CroggyTech@admin';
+const USER_PASS = '1234';
 
 module.exports = {
     port: PORT,

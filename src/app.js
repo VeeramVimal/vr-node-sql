@@ -10,9 +10,9 @@ app.options('*', cors);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 
-app.use('/api', routes);
+app.use('/api/v1', routes);
 app.get((req, res, next) => {
-    next( new Error("Not Fount"));
+    next( new Error("Not Found"));
 });
 
 module.exports = app;

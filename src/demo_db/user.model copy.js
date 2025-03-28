@@ -6,42 +6,52 @@ module.exports = (sequelize, DataTypes) => {
     "User",
     {
       id: {
-        type: DataTypes.BIGINT.UNSIGNED,
+        type: DataTypes.INTEGER,
+        autoIncremente: true,
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
       },
       firstName: {
         type: DataTypes.STRING,
-        // allowNull: false,
+        allowNull: false,
+        required: true,
       },
       lastName: {
         type: DataTypes.STRING,
-        // allowNull: false,
+        allowNull: false,
+        required: true,
       },
       email: {
         type: DataTypes.STRING,
+        required: true,
         unique: true,
         trim: true,
         lowercase: true,
-        validate: {
-          isEmail: true,
-        }
+        validate(value) {
+          if (!validator.isEmail(value)) {
+            throw new Error("Invalid email");
+          }
+        },
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: [6, 255],
-          is: /^(?=.*[a-zA-Z])(?=.*\d)/, // Must contain at least one letter and one number
+        required: true,
+        trim: true,
+        minlength: 6,
+        validate(value) {
+          if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+            throw new Error(
+              "Password must contain at least one letter and one number"
+            );
+          }
         },
       },
       mobile_no: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          len: [10, 15],
-        },
+        required: true,
+        minlength: 10,
       },
       age: {
         type: DataTypes.INTEGER,
@@ -62,31 +72,12 @@ module.exports = (sequelize, DataTypes) => {
       country: {
         type: DataTypes.STRING,
       },
-      profile_picture: {
-        type: DataTypes.STRING,
-      },
       userStatus: {
         type: DataTypes.ENUM,
         values: ["Active", "In-active"],
         defaultValue: "In-active",
         allowNull: false
       },
-      // createdBy: {
-      //   type: DataTypes.BIGINT.UNSIGNED,
-      //   defaultValue: sequelize.literal("CURRENT_TIMESTAMP(3)"),
-      // },
-      // updatedBy: {
-      //   type: DataTypes.BIGINT.UNSIGNED,
-      //   defaultValue: sequelize.literal("CURRENT_TIMESTAMP(3)"),
-      // },
-      // createdAt: {
-      //   type: DataTypes.DATE,
-      //   allowNull: true,
-      // },
-      // updatedAt: {
-      //   type: DataTypes.DATE,
-      //   allowNull: true,
-      // },
       createdBy: {
         type: DataTypes.DATE(3),
         defaultValue: sequelize.literal("CURRENT_TIMESTAMP(3)"),
@@ -107,16 +98,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: "users",
       timestamps: false,
-      // hooks: {
-      //   beforeCreate: async (user) => {
-      //     user.password = await bcrypt.hash(user.password, 8);
-      //   },
-      //   beforeUpdate: async (user) => {
-      //     if (user.changed('password')) {
-      //       user.password = await bcrypt.hash(user.password, 8);
-      //     }
-      //   },
-      // }
     }
   );
   User.beforeCreate(async (user) => {
@@ -133,14 +114,9 @@ module.exports = (sequelize, DataTypes) => {
     const user = this;
     return bcrypt.compare(password, user.password);
   };
-  // User.prototype.toJSON = function () {
-  //   var values = Object.assign({}, this.get());
-
-  //   delete values.password;
-  //   return values;
-  // };
   User.prototype.toJSON = function () {
-    const values = { ...this.get() };
+    var values = Object.assign({}, this.get());
+
     delete values.password;
     return values;
   };
