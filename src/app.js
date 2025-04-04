@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const config = require("./config/config");
 const routes = require("./routes");
+require('./cron/user.cron');
+
 const app = express();
 
 app.use(cors());

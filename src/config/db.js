@@ -6,8 +6,14 @@ const sequelize = new Sequelize(
     config.db.DB_USER_PASS,
     {
         host: config.db.DB_HOST,
-        dialect: config.db.DB_DIALECT
-    }
+        dialect: config.db.DB_DIALECT,
+        pool: {
+            max: 10,
+            min: 5,
+            idle: 10000
+        }
+    },
+    
 );
 
 module.exports = {sequelize};
