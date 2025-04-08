@@ -125,5 +125,6 @@ module.exports = {
     CreateUser,
     StopUserCron,
     CreateUserInterval,
-    StopUserInterval
+    StopUserInterval,
+    
 }
