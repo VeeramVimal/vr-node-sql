@@ -2,7 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const config = require("./config/config");
 const routes = require("./routes");
-require('./cron/user.cron');
+
+if(config.cron_jobs.AUTO_GENERATE_USER !== 'Disable') {
+    require('./cron/user.cron');
+}
 
 const app = express();
 

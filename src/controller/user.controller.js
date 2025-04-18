@@ -76,7 +76,7 @@ const CreateUserInterval = async (req, res) => {
 const StopUserInterval = async (req, res) => {
     try {
         console.log("a,jdsfkasjfdlasf,,,, StopUserInterval");
-        
+
         if (!intervalTask) {
             return res.status(400).json({ message: "No interval job is running." });
         }
@@ -121,10 +121,22 @@ const CreateUserAutomatically = async () => {
     if (!userBody) { throw new Error('something went wrong') }
     await User.create(userBody);
 }
+
+const CreateUserManual = async (req, res) => {
+    try {
+        const userBody = req.body;
+        console.log("userBody===========", userBody);
+        const userData = await User.create(userBody);
+        return res.status(200).json({ message: 'user create successfully!', data: userData })
+    } catch (error) {
+        console.error("Error creating user:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+}
 module.exports = {
     CreateUser,
     StopUserCron,
     CreateUserInterval,
     StopUserInterval,
-    
+    CreateUserManual,
 }

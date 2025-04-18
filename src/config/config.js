@@ -13,5 +13,8 @@ module.exports = {
         DB_USER_NAME: USER_NAME,
         DB_USER_PASS: USER_PASS,
         DB_DIALECT: 'mysql'
+    },
+    cron_jobs: {
+        AUTO_GENERATE_USER: 'Disable', // Enable, Disable
     }
 };
